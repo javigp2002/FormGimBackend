@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthControllerModule } from './api/auth/controller/auth.controller.module';
+import { FormControllerModule } from './api/form/controller/form.controller.module';
 
 @Module({
 	imports: [
@@ -11,6 +12,7 @@ import { AuthControllerModule } from './api/auth/controller/auth.controller.modu
 			isGlobal: true,
 		}),
 		AuthControllerModule,
+		FormControllerModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

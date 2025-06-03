@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    ports:
+      - "4444:3306"
+
+
+networks:
+  biori-network:
+    driver: bridge

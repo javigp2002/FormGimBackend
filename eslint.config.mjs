@@ -25,6 +25,10 @@ export default tseslint.config(
       },
     },
     {
-      rules: {},
+        rules: {
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
+
+        },
     },
 );
