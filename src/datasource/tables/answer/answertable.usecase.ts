@@ -22,11 +22,10 @@ export class AnswerTable {
 	}
 
 	async insertOne(dto: AnswertableDto): Promise<number> {
-		const result = await this.dbConnection.insertOne(this.tableName, {
+		return await this.dbConnection.insertOne(this.tableName, {
 			id_question: dto.id_question,
 			id_user: dto.id_user,
 			answer: dto.answer || QuestionType.TEXTBOX,
 		});
-		return result.insertId;
 	}
 }

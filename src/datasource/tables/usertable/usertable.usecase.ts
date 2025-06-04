@@ -30,13 +30,12 @@ export class UserTable {
 	}
 
 	async insertUser(user: UserTableDto): Promise<number> {
-		const result = await this.dbConnection.insertOne('user', {
+		return await this.dbConnection.insertOne('user', {
 			id_google: user.id_google,
 			name: user.name,
 			surname: user.surname,
 			email: user.email,
 			is_admin: user.is_admin ? 1 : 0,
 		});
-		return result.insertId;
 	}
 }

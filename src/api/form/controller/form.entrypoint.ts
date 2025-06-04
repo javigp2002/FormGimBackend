@@ -2,6 +2,11 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { GetNewFormsUsecase } from '../../../domain/use_cases/form/get-new-forms-usecase.service';
 import { GetUserFormsDto } from './dto/get-user-forms.dto';
 import { ResponseDto } from './dto/form-response.dto';
+import { GetDoneFormsUsecase } from '../../../domain/use_cases/form/get-done-forms-usecase.service';
+import { GetAuthorFormsUsecase } from '../../../domain/use_cases/form/get-author-forms-usecase.service';
+import { SurveyDto } from './dto/save-form.dto';
+import { SaveFormModel } from '../../../domain/model/save-form.model';
+import { SaveFormsUsecaseService } from '../../../domain/use_cases/form/save-forms-usecase.service';
 
 type newForms = {
 	forms: ResponseDto[];
@@ -11,8 +16,9 @@ type newForms = {
 export class FormEntrypoint {
 	constructor(
 		private getNewFormsForUser: GetNewFormsUsecase,
-		private getAuthorFormsForUser: GetNewFormsUsecase,
-		private getDoneFormsForUser: GetNewFormsUsecase,
+		private getAuthorFormsForUser: GetAuthorFormsUsecase,
+		private getDoneFormsForUser: GetDoneFormsUsecase,
+		private saveFormsUsecaseService: SaveFormsUsecaseService,
 	) {
 	}
 
@@ -47,5 +53,17 @@ export class FormEntrypoint {
 		}
 
 		return result.map(form => ResponseDto.fromModel(form)).filter((dto): dto is ResponseDto => dto !== null);
+	}
+
+
+	@HttpCode(HttpStatus.OK)
+	@Post('form/save')
+	async saveNewForm(@Body() userFormsDto: SurveyDto): Promise<any> {
+		const model = SaveFormModel.fromDto(userFormsDto);
+		const result = await this.saveFormsUsecaseService.run(model);
+		if (!result) {
+			throw new Error('No forms found for the user');
+		}
+		return result;
 	}
 }

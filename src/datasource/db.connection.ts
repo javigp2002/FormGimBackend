@@ -63,21 +63,29 @@ export class DbConnection {
 		}
 	}
 
-	async insertOne(table: string, model: any, keyUpdate?: string[]): Promise<any> {
+	async insertOne(table: string, model: any, keyUpdate?: string[]): Promise<number> {
 		let keyUpdateValue;
 		if (keyUpdate) {
 			keyUpdateValue = keyUpdate.map(it => `${it}=VALUES(${it})`).join(',');
 		}
 
-		const sql = `INSERT INTO ${table}
-                     SET ? ${keyUpdate ? 'ON DUPLICATE KEY UPDATE ' + keyUpdateValue : ''}`;
+		const columns = Object.keys(model).join(', ');
+		const placeholders = Object.keys(model).map(() => '?').join(', ');
 
-		const valueCopy = this.sanitizeModel(model);
+		const sql = `INSERT INTO ${table} (${columns})
+                     VALUES (${placeholders})`;
+		const values = Object.values(this.sanitizeModel(model));
 
-		const result = await this.runQuery(sql, [valueCopy]);
-		if (result.length === 0) throw new Error('No result from insertOne');
+		try {
+			const result = await this.runQuery(sql, values); // Pasa el array de valores
+			if (!result || result.length === 0) throw new Error('No result from insertOne');
 
-		return result;
+			return result.insertId;
+		} catch (err) {
+			console.error('Database query error: ' + err);
+			return -1;
+		}
+
 	}
 
 	private sanitizeModel(model: any): object {

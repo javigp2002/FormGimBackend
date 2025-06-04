@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DbConnection } from '../../db.connection';
 import { OptiontableDto } from './dto/optiontable.dto';
+import { SaveOptionModel } from '../../../domain/model/save-form.model';
 
 @Injectable()
 export class OptionTable {
@@ -21,10 +22,13 @@ export class OptionTable {
 	}
 
 	async insertOne(dto: OptiontableDto): Promise<number> {
-		const result = await this.dbConnection.insertOne(this.tableName, {
+		return await this.dbConnection.insertOne(this.tableName, {
 			id_question: dto.id_question,
 			title: dto.title,
 		});
-		return result.insertId;
+	}
+
+	async saveOption(answer: SaveOptionModel, idQuestion: number) {
+		return await this.insertOne(new OptiontableDto(-1, idQuestion, answer.title));
 	}
 }
