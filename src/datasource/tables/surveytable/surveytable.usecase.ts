@@ -32,12 +32,19 @@ export class SurveyTable {
 		return result.insertId;
 	}
 
-	async getSurveysNOTDoneByUser(userId: number): Promise<BasicFormModel[]> {
+	async getSurveysByUser(userId: number, isAnsweredByHim: boolean, isAuthor: boolean): Promise<BasicFormModel[]> {
+		const authorCondition = isAuthor ? 'id_author = ?' : 'id_user_answer = ?';
+
+
+		let isAnsweredCondition = '1=1';
+		if (!authorCondition)
+			isAnsweredCondition = isAnsweredByHim ? 'is_answered = 1' : 'is_answered = 0';
+
 		const query = `
             SELECT *
             FROM ${this.viewName}
-            WHERE id_user_answer = ?
-              and is_answered = 0
+            WHERE ${authorCondition}
+              and ${isAnsweredCondition}
 		`;
 		const result = await this.dbConnection.runQuery(query, [userId]);
 
