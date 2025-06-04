@@ -36,8 +36,7 @@ export class SurveyTable {
 		const authorCondition = isAuthor ? 'id_author = ?' : 'id_user_answer = ?';
 
 		let isAnsweredCondition = '1=1';
-		if (!isAuthor)
-			isAnsweredCondition = isAnsweredByHim ? 'is_answered = 1' : 'is_answered = 0';
+		if (!isAuthor) isAnsweredCondition = isAnsweredByHim ? 'is_answered = 1' : 'is_answered = 0';
 
 		const query = `
             SELECT *
@@ -63,7 +62,6 @@ export class SurveyTable {
 			console.error('Error saving survey:', error);
 			return -1;
 		}
-
 	}
 
 	async deleteById(idSurvey: number) {
@@ -78,6 +76,5 @@ export class SurveyTable {
 			console.error('Error deleting survey:', error);
 			throw error;
 		}
-
 	}
 }

@@ -70,7 +70,9 @@ export class DbConnection {
 		}
 
 		const columns = Object.keys(model).join(', ');
-		const placeholders = Object.keys(model).map(() => '?').join(', ');
+		const placeholders = Object.keys(model)
+			.map(() => '?')
+			.join(', ');
 
 		const sql = `INSERT INTO ${table} (${columns})
                      VALUES (${placeholders})`;
@@ -85,7 +87,6 @@ export class DbConnection {
 			console.error('Database query error: ' + err);
 			return -1;
 		}
-
 	}
 
 	private sanitizeModel(model: any): object {

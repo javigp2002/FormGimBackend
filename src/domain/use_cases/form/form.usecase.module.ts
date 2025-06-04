@@ -5,12 +5,7 @@ import { GetAuthorFormsUsecase } from './get-author-forms-usecase.service';
 import { GetDoneFormsUsecase } from './get-done-forms-usecase.service';
 import { SaveFormsUsecaseService } from './save-forms-usecase.service';
 
-const usecases = [
-	GetNewFormsUsecase,
-	GetAuthorFormsUsecase,
-	GetDoneFormsUsecase,
-	SaveFormsUsecaseService,
-];
+const usecases = [GetNewFormsUsecase, GetAuthorFormsUsecase, GetDoneFormsUsecase, SaveFormsUsecaseService];
 
 @Module({
 	imports: [DbModule],

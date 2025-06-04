@@ -55,7 +55,6 @@ export class FormEntrypoint {
 		return result.map(form => ResponseDto.fromModel(form)).filter((dto): dto is ResponseDto => dto !== null);
 	}
 
-
 	@HttpCode(HttpStatus.OK)
 	@Post('form/save')
 	async saveNewForm(@Body() userFormsDto: SurveyDto): Promise<any> {
