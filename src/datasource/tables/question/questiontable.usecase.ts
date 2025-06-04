@@ -35,4 +35,19 @@ export class QuestionTable {
 			new QuestiontableDto(-1, idSurvey, question.title, question.type || QuestionType.TEXTBOX),
 		);
 	}
+
+	async getQuestionsBySurveyId(surveyId: number): Promise<QuestiontableDto[]> {
+		const query = `
+            SELECT *
+            FROM ${this.tableName}
+            WHERE id_survey = ?
+		`;
+		const result = await this.dbConnection.runQuery(query, [surveyId]);
+
+		if (result.length <= 0) return [];
+
+		return result
+			.map((question: any) => QuestiontableDto.fromSQL(question))
+			.filter((dto): dto is QuestiontableDto => dto !== null);
+	}
 }

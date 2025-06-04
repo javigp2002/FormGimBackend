@@ -1,16 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { GetNewFormsUsecase } from '../../../domain/use_cases/form/get-new-forms-usecase.service';
 import { GetUserFormsDto } from './dto/get-user-forms.dto';
-import { ResponseDto } from './dto/form-response.dto';
+import { ResponseDto } from './dto/basic-form-response.dto';
 import { GetDoneFormsUsecase } from '../../../domain/use_cases/form/get-done-forms-usecase.service';
 import { GetAuthorFormsUsecase } from '../../../domain/use_cases/form/get-author-forms-usecase.service';
 import { SurveyDto } from './dto/save-form.dto';
 import { SaveFormModel } from '../../../domain/model/save-form.model';
 import { SaveFormsUsecaseService } from '../../../domain/use_cases/form/save-forms-usecase.service';
-
-type newForms = {
-	forms: ResponseDto[];
-};
+import { GetFormService } from '../../../domain/use_cases/form/get-form.service';
+import { AllFormResponseDto } from './dto/all-form.response.dto';
 
 @Controller()
 export class FormEntrypoint {
@@ -19,6 +17,7 @@ export class FormEntrypoint {
 		private getAuthorFormsForUser: GetAuthorFormsUsecase,
 		private getDoneFormsForUser: GetDoneFormsUsecase,
 		private saveFormsUsecaseService: SaveFormsUsecaseService,
+		private getFormService: GetFormService,
 	) {
 	}
 
@@ -64,5 +63,16 @@ export class FormEntrypoint {
 			throw new Error('No forms found for the user');
 		}
 		return result;
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Get('form/:id')
+	async getFormFromId(@Param('id') id: number): Promise<any> {
+		const result = await this.getFormService.run(id);
+		if (!result) {
+			throw new Error('No forms found for the user');
+		}
+
+		return AllFormResponseDto.fromModel(result);
 	}
 }

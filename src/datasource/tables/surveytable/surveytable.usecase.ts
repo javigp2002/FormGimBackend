@@ -15,9 +15,14 @@ export class SurveyTable {
 
 	async getById(id: number): Promise<SurveytableDto | null> {
 		const query = `
-            SELECT *
-            FROM ${this.tableName}
-            WHERE id = ?
+            SELECT s.id,
+                   s.title,
+                   s.description,
+                   s.id_user,
+                   CONCAT(u.name, ' ', u.surname) AS author_name
+            FROM ${this.tableName} s
+                     INNER JOIN user u ON s.id_user = u.id
+            WHERE s.id = ?
 		`;
 		const result = await this.dbConnection.runQuery(query, [id]);
 

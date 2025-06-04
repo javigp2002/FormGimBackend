@@ -31,4 +31,17 @@ export class OptionTable {
 	async saveOption(answer: SaveOptionModel, idQuestion: number) {
 		return await this.insertOne(new OptiontableDto(-1, idQuestion, answer.title));
 	}
+
+	async getOptionsByQuestionId(idQuestion: number): Promise<string[]> {
+		const query = `
+            SELECT title
+            FROM ${this.tableName}
+            WHERE id_question = ?
+		`;
+		const result = await this.dbConnection.runQuery(query, [idQuestion]);
+
+		if (result.length <= 0) return [];
+
+		return result.map((option: { title: string }) => option.title);
+	}
 }

@@ -15,7 +15,7 @@ export class QuestiontableDto {
 				json.id,
 				json.id_survey,
 				json.title,
-				(QuestionType[json.question_type as keyof typeof QuestionType] as QuestionType) ?? QuestionType.TEXTBOX,
+				(json.question_type as number) ?? QuestionType.TEXTBOX,
 			);
 		} catch (error) {
 			return null;

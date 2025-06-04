@@ -4,8 +4,15 @@ import { DbModule } from '../../../datasource/db.module';
 import { GetAuthorFormsUsecase } from './get-author-forms-usecase.service';
 import { GetDoneFormsUsecase } from './get-done-forms-usecase.service';
 import { SaveFormsUsecaseService } from './save-forms-usecase.service';
+import { GetFormService } from './get-form.service';
 
-const usecases = [GetNewFormsUsecase, GetAuthorFormsUsecase, GetDoneFormsUsecase, SaveFormsUsecaseService];
+const usecases = [
+	GetNewFormsUsecase,
+	GetAuthorFormsUsecase,
+	GetDoneFormsUsecase,
+	SaveFormsUsecaseService,
+	GetFormService,
+];
 
 @Module({
 	imports: [DbModule],
