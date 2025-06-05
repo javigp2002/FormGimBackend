@@ -6,6 +6,7 @@ import { GetDoneFormsUsecase } from './get-done-forms-usecase.service';
 import { SaveFormsUsecaseService } from './save-forms-usecase.service';
 import { GetFormService } from './get-form.service';
 import { SaveAnswersUsecaseService } from './save-answers-usecase.service';
+import { GetFormAnsweredService } from './get-form-answered.service';
 
 const usecases = [
 	GetNewFormsUsecase,
@@ -14,6 +15,7 @@ const usecases = [
 	SaveFormsUsecaseService,
 	GetFormService,
 	SaveAnswersUsecaseService,
+	GetFormAnsweredService,
 ];
 
 @Module({

@@ -31,6 +31,7 @@ class QuestionResponse {
 		readonly title: string,
 		readonly questionType: number,
 		readonly options: string[] = [],
+		readonly answers: string[] = [],
 	) {
 	}
 
@@ -40,6 +41,7 @@ class QuestionResponse {
 			model.title,
 			model.questionType,
 			model.options,
+			model.answers,
 		);
 	}
 }

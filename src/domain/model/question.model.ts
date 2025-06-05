@@ -8,12 +8,13 @@ export class QuestionModel {
 		readonly title: string,
 		readonly questionType: QuestionType,
 		readonly options?: string[],
+		readonly answers?: string[],
 	) {
 	}
 
-	static fromDtos(dto: QuestiontableDto, options?: string[]): QuestionModel | null {
+	static fromDtos(dto: QuestiontableDto, options?: string[], answers?: string[]): QuestionModel | null {
 		try {
-			return new QuestionModel(dto.id, dto.id_survey, dto.title, dto.question_type, options);
+			return new QuestionModel(dto.id, dto.id_survey, dto.title, dto.question_type, options, answers);
 		} catch {
 			return null;
 		}

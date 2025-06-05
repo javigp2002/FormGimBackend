@@ -12,6 +12,7 @@ import { AllFormResponseDto } from './dto/all-form.response.dto';
 import { SaveAnswersFromUserDto } from './dto/answer-list.dto';
 import { SaveAnswersFromUserModel } from '../../../domain/model/save-answers.model';
 import { SaveAnswersUsecaseService } from '../../../domain/use_cases/form/save-answers-usecase.service';
+import { GetFormAnsweredService } from '../../../domain/use_cases/form/get-form-answered.service';
 
 @Controller()
 export class FormEntrypoint {
@@ -22,6 +23,7 @@ export class FormEntrypoint {
 		private saveFormsUsecaseService: SaveFormsUsecaseService,
 		private getFormService: GetFormService,
 		private saveAnswersUsecaseService: SaveAnswersUsecaseService,
+		private getFormAnsweredService: GetFormAnsweredService,
 	) {
 	}
 
@@ -73,6 +75,17 @@ export class FormEntrypoint {
 	@Get('form/:id')
 	async getFormFromId(@Param('id') id: number): Promise<any> {
 		const result = await this.getFormService.run(id);
+		if (!result) {
+			throw new Error('No forms found for the user');
+		}
+
+		return AllFormResponseDto.fromModel(result);
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Get('form/:id/answered/:idUser')
+	async getFormAnsweredFromId(@Param('id') id: number, @Param('idUser') idUser: number): Promise<any> {
+		const result = await this.getFormAnsweredService.run(id, idUser);
 		if (!result) {
 			throw new Error('No forms found for the user');
 		}

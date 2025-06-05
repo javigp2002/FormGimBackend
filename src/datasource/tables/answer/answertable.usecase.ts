@@ -45,4 +45,16 @@ export class AnswerTable {
 		return 0;
 
 	}
+
+	async getQuestionsByQuestionAndUserId(idQuestion: number, userId: number): Promise<string[]> {
+		const query = `
+            SELECT *
+            FROM ${this.tableName}
+            WHERE id_question = ?
+              and id_user = ?
+		`;
+		const result = await this.dbConnection.runQuery(query, [idQuestion, userId]);
+
+		return result.length > 0 ? result.map((row: any) => row.answer) : [];
+	}
 }
