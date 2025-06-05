@@ -5,6 +5,7 @@ import { GetAuthorFormsUsecase } from './get-author-forms-usecase.service';
 import { GetDoneFormsUsecase } from './get-done-forms-usecase.service';
 import { SaveFormsUsecaseService } from './save-forms-usecase.service';
 import { GetFormService } from './get-form.service';
+import { SaveAnswersUsecaseService } from './save-answers-usecase.service';
 
 const usecases = [
 	GetNewFormsUsecase,
@@ -12,6 +13,7 @@ const usecases = [
 	GetDoneFormsUsecase,
 	SaveFormsUsecaseService,
 	GetFormService,
+	SaveAnswersUsecaseService,
 ];
 
 @Module({

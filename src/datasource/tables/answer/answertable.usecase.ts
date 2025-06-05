@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DbConnection } from '../../db.connection';
 import { AnswertableDto } from './dto/answertable.dto';
 import { QuestionType } from '../../../domain/model/question-type.enum';
+import { SaveAnswersFromUserModel } from '../../../domain/model/save-answers.model';
 
 @Injectable()
 export class AnswerTable {
@@ -27,5 +28,21 @@ export class AnswerTable {
 			id_user: dto.id_user,
 			answer: dto.answer || QuestionType.TEXTBOX,
 		});
+	}
+
+	async insertBulk(answersModel: SaveAnswersFromUserModel): Promise<number> {
+		const idUser = answersModel.idUser;
+		const answers = answersModel.answers.map(answer => ({
+			id_question: answer.idQuestion,
+			id_user: idUser,
+			answer: answer.answer,
+		}));
+
+		const result = await this.dbConnection.insertBulk(this.tableName, answers);
+		if (result) {
+			return result.affectedRows;
+		}
+		return 0;
+
 	}
 }

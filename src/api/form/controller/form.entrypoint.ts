@@ -9,6 +9,9 @@ import { SaveFormModel } from '../../../domain/model/save-form.model';
 import { SaveFormsUsecaseService } from '../../../domain/use_cases/form/save-forms-usecase.service';
 import { GetFormService } from '../../../domain/use_cases/form/get-form.service';
 import { AllFormResponseDto } from './dto/all-form.response.dto';
+import { SaveAnswersFromUserDto } from './dto/answer-list.dto';
+import { SaveAnswersFromUserModel } from '../../../domain/model/save-answers.model';
+import { SaveAnswersUsecaseService } from '../../../domain/use_cases/form/save-answers-usecase.service';
 
 @Controller()
 export class FormEntrypoint {
@@ -18,6 +21,7 @@ export class FormEntrypoint {
 		private getDoneFormsForUser: GetDoneFormsUsecase,
 		private saveFormsUsecaseService: SaveFormsUsecaseService,
 		private getFormService: GetFormService,
+		private saveAnswersUsecaseService: SaveAnswersUsecaseService,
 	) {
 	}
 
@@ -74,5 +78,12 @@ export class FormEntrypoint {
 		}
 
 		return AllFormResponseDto.fromModel(result);
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Post('form/:id/save_answers')
+	async GetAnswersFromForm(@Param('id') id: number, @Body() listAnswers: SaveAnswersFromUserDto): Promise<boolean> {
+		const model = new SaveAnswersFromUserModel(listAnswers);
+		return await this.saveAnswersUsecaseService.run(model);
 	}
 }
