@@ -46,7 +46,7 @@ export class AnswerTable {
 
 	}
 
-	async getQuestionsByQuestionAndUserId(idQuestion: number, userId: number): Promise<string[]> {
+	async getAnswersByQuestionAndUserId(idQuestion: number, userId: number): Promise<string[]> {
 		const query = `
             SELECT *
             FROM ${this.tableName}
@@ -56,5 +56,28 @@ export class AnswerTable {
 		const result = await this.dbConnection.runQuery(query, [idQuestion, userId]);
 
 		return result.length > 0 ? result.map((row: any) => row.answer) : [];
+	}
+
+	async getAnswersByQuestion(idQuestion: number): Promise<string[]> {
+		const query = `
+            SELECT *
+            FROM ${this.tableName}
+            WHERE id_question = ?
+		`;
+		const result = await this.dbConnection.runQuery(query, [idQuestion]);
+
+		return result.length > 0 ? result.map((row: any) => row.answer) : [];
+	}
+
+	async getTimesFormHasBeenDone(idQuestion: number): Promise<number> {
+		const query = `
+            select COUNT(*) as "Total"
+            FROM ${this.tableName}
+            WHERE id_question = ?
+            GROUP BY id_user
+		`;
+		const result = await this.dbConnection.runQuery(query, [idQuestion]);
+
+		return result.length > 0 ? Number(result[0].Total) : 0;
 	}
 }

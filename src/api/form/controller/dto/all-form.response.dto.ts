@@ -7,6 +7,7 @@ export class AllFormResponseDto {
 		readonly title: string,
 		readonly description: string,
 		readonly authorName: string,
+		readonly timesFormDone: number,
 		readonly questions: QuestionResponse[],
 	) {
 	}
@@ -17,6 +18,7 @@ export class AllFormResponseDto {
 			model.title,
 			model.description,
 			model.author_name,
+			model.timesFormHasBeenDone,
 			model.questions.map(question => {
 				return QuestionResponse.fromModel(question);
 			}),
