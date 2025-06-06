@@ -71,10 +71,9 @@ export class AnswerTable {
 
 	async getTimesFormHasBeenDone(idQuestion: number): Promise<number> {
 		const query = `
-            select COUNT(*) as "Total"
+            select COUNT(DISTINCT id_user) as "Total"
             FROM ${this.tableName}
             WHERE id_question = ?
-            GROUP BY id_user
 		`;
 		const result = await this.dbConnection.runQuery(query, [idQuestion]);
 
