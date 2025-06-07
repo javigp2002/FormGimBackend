@@ -16,4 +16,15 @@ export class UserTableDto {
 			return null;
 		}
 	}
+
+	static fromUserModel(userModel: any): UserTableDto {
+		return new UserTableDto(
+			userModel.id,
+			userModel.id_google,
+			userModel.email,
+			userModel.name,
+			userModel.surname,
+			userModel.isAdmin
+		);
+	}
 }

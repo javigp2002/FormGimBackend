@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DbConnection } from '../../db.connection';
 import { UserTableDto } from './dto/usertable.dto';
+import { UserModel } from '../../../domain/model/user.model';
 
 @Injectable()
 export class UserTable {
@@ -29,7 +30,9 @@ export class UserTable {
 		return userJson.length > 0 ? UserTableDto.fromSQL(userJson[0]) : null;
 	}
 
-	async insertUser(user: UserTableDto): Promise<number> {
+	async insertUser(userModel: UserModel): Promise<number> {
+		const user = UserTableDto.fromUserModel(userModel);
+
 		return await this.dbConnection.insertOne('user', {
 			id_google: user.id_google,
 			name: user.name,
