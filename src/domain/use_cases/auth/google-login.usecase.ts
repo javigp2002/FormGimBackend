@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserModel } from '../../model/user.model';
-import { DateTime } from 'luxon';
 import { UserTable } from '../../../datasource/tables/usertable/usertable.usecase';
 
 const {OAuth2Client} = require('google-auth-library');
@@ -43,7 +42,7 @@ export class GoogleLoginUsecase {
 				throw new Error('Error inserting user into the database');
 			}
 
-			return new UserModel(userId, googleId,  given_name, family_name, picture, email, false);
+			return new UserModel(userId, googleId, given_name, family_name, picture, email, false);
 		}
 
 		return UserModel.fromUserTableDTO(result);

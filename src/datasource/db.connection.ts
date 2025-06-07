@@ -82,7 +82,7 @@ export class DbConnection {
 			const result = await this.runQuery(sql, values); // Pasa el array de valores
 			if (!result || result.length === 0) throw new Error('No result from insertOne');
 
-			return result.insertId;
+			return Number(result.insertId);
 		} catch (err) {
 			console.error('Database query error: ' + err);
 			return -1;
