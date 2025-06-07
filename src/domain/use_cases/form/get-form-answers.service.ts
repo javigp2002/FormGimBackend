@@ -7,7 +7,7 @@ import { FormModel } from '../../model/form.model';
 import { AnswerTable } from '../../../datasource/tables/answer/answertable.usecase';
 
 @Injectable()
-export class GetFormAnsweredService {
+export class GetFormAnswersService {
 	constructor(
 		private surveyTable: SurveyTable,
 		private questionTable: QuestionTable,
@@ -16,7 +16,7 @@ export class GetFormAnsweredService {
 	) {
 	}
 
-	async run(surveyId: number, userId: number): Promise<FormModel | null> {
+	async run(surveyId: number): Promise<FormModel | null> {
 		const [survey, questions] = await Promise.all([
 			this.surveyTable.getById(surveyId),
 			this.questionTable.getQuestionsBySurveyId(surveyId),
@@ -25,17 +25,23 @@ export class GetFormAnsweredService {
 		if (!survey || questions.length <= 0) return null;
 
 		const questionOptions: QuestionModel[] = [];
+		let timesFormHasBeenDone = 0;
 		for (const question of questions) {
-			const [options, answers] = await Promise.all([
+			const [options, answers, timesAnswerQuestion] = await Promise.all([
 				this.optionTable.getOptionsByQuestionId(question.id),
-				this.answerTable.getAnswersByQuestionAndUserId(question.id, userId),
+				this.answerTable.getAnswersByQuestion(question.id),
+				this.answerTable.getTimesFormHasBeenDone(question.id),
 			]);
 			const questionModel = QuestionModel.fromDtos(question, options, answers);
 			if (questionModel) {
 				questionOptions.push(questionModel);
+				if (timesAnswerQuestion > timesFormHasBeenDone) {
+					timesFormHasBeenDone = timesAnswerQuestion;
+				}
 			}
 		}
-		const formModel = FormModel.fromDtos(survey, questionOptions);
+
+		const formModel = FormModel.fromDtos(survey, questionOptions, timesFormHasBeenDone);
 		if (!formModel) return null;
 		return formModel;
 	}

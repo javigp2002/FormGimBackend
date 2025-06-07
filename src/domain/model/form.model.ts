@@ -8,12 +8,13 @@ export class FormModel {
 		readonly description: string,
 		readonly author_name: string,
 		readonly questions: QuestionModel[],
+		readonly timesFormHasBeenDone: number = 0,
 	) {
 	}
 
-	static fromDtos(dto: SurveytableDto, questionModels: QuestionModel[]): FormModel | null {
+	static fromDtos(dto: SurveytableDto, questionModels: QuestionModel[], timesFormHasBeenDone: number = 0): FormModel | null {
 		try {
-			return new FormModel(dto.id, dto.title, dto.description, dto.author_name ?? 'Desconocido', questionModels);
+			return new FormModel(dto.id, dto.title, dto.description, dto.author_name ?? 'Desconocido', questionModels, timesFormHasBeenDone);
 		} catch (error) {
 			return null;
 		}
