@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { UserTableDto } from '../../datasource/tables/usertable/dto/usertable.dto';
 
 export class UserModel {
@@ -13,7 +12,7 @@ export class UserModel {
 	) {
 	}
 
-	static fromUserTableDTO(userTable: UserTableDto): UserModel{
-		return new UserModel(userTable.id, userTable.id_google, userTable.name, userTable.surname, "", userTable.email, userTable.is_admin);
+	static fromUserTableDTO(userTable: UserTableDto, pictureUrl: string): UserModel {
+		return new UserModel(userTable.id, userTable.id_google, userTable.name, userTable.surname, pictureUrl, userTable.email, userTable.is_admin);
 	}
 }

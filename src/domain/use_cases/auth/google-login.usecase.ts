@@ -12,8 +12,8 @@ export class GoogleLoginUsecase {
 
 	async run(googleToken: String): Promise<UserModel> {
 		const ticket = await client.verifyIdToken({
-      idToken: googleToken,
-      audience: process.env.CLIENT_ID,  // CLIENT_ID of the app that accesses the backend
+			idToken: googleToken,
+			audience: process.env.CLIENT_ID,  // CLIENT_ID of the app that accesses the backend
 		});
 		const payload = ticket.getPayload();
 
@@ -45,6 +45,6 @@ export class GoogleLoginUsecase {
 			return new UserModel(userId, googleId, given_name, family_name, picture, email, false);
 		}
 
-		return UserModel.fromUserTableDTO(result);
+		return UserModel.fromUserTableDTO(result, picture);
 	}
 }

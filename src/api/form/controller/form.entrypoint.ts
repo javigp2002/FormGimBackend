@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { GetNewFormsUsecase } from '../../../domain/use_cases/form/get-new-forms-usecase.service';
 import { GetUserFormsDto } from './dto/get-user-forms.dto';
 import { ResponseDto } from './dto/basic-form-response.dto';
@@ -14,6 +14,7 @@ import { SaveAnswersFromUserModel } from '../../../domain/model/save-answers.mod
 import { SaveAnswersUsecaseService } from '../../../domain/use_cases/form/save-answers-usecase.service';
 import { GetFormAnsweredService } from '../../../domain/use_cases/form/get-form-answered.service';
 import { GetFormAnswersService } from '../../../domain/use_cases/form/get-form-answers.service';
+import { AuthGuard } from '../../auth/guards/auth.guard';
 
 @Controller()
 export class FormEntrypoint {
@@ -29,6 +30,7 @@ export class FormEntrypoint {
 	) {
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('new_forms')
 	async newForms(@Body() userFormsDto: GetUserFormsDto): Promise<ResponseDto[]> {
@@ -40,6 +42,7 @@ export class FormEntrypoint {
 		return result.map(form => ResponseDto.fromModel(form)).filter((dto): dto is ResponseDto => dto !== null);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('done_forms')
 	async doneForms(@Body() userFormsDto: GetUserFormsDto): Promise<ResponseDto[]> {
@@ -51,6 +54,7 @@ export class FormEntrypoint {
 		return result.map(form => ResponseDto.fromModel(form)).filter((dto): dto is ResponseDto => dto !== null);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('author_forms')
 	async authorForms(@Body() userFormsDto: GetUserFormsDto): Promise<ResponseDto[]> {
@@ -62,6 +66,7 @@ export class FormEntrypoint {
 		return result.map(form => ResponseDto.fromModel(form)).filter((dto): dto is ResponseDto => dto !== null);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('form/save')
 	async saveNewForm(@Body() userFormsDto: SurveyDto): Promise<any> {
@@ -73,6 +78,7 @@ export class FormEntrypoint {
 		return result;
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Get('form/:id')
 	async getFormFromId(@Param('id') id: number): Promise<any> {
@@ -84,6 +90,7 @@ export class FormEntrypoint {
 		return AllFormResponseDto.fromModel(result);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Get('form/:id/answers')
 	async getFormAnswers(@Param('id') id: number): Promise<AllFormResponseDto> {
@@ -95,6 +102,7 @@ export class FormEntrypoint {
 		return AllFormResponseDto.fromModel(result);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Get('form/:id/answered/:idUser')
 	async getFormAnsweredFromId(@Param('id') id: number, @Param('idUser') idUser: number): Promise<any> {
@@ -106,6 +114,7 @@ export class FormEntrypoint {
 		return AllFormResponseDto.fromModel(result);
 	}
 
+	@UseGuards(AuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('form/:id/save_answers')
 	async GetAnswersFromForm(@Param('id') id: number, @Body() listAnswers: SaveAnswersFromUserDto): Promise<boolean> {
